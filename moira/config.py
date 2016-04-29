@@ -23,7 +23,6 @@ except ImportError:
     ujson = None
 
 CONFIG_PATH = '/etc/moira/config.yml'
-# CONFIG_PATH = '..\\pkg\\worker.yml'
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379
 LOG_DIRECTORY = "stdout"
