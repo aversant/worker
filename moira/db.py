@@ -1074,7 +1074,7 @@ class Db(service.Service):
         defer.returnValue([anyjson.deserialize(e) for e in events])
 
     @defer.inlineCallbacks
-    @docstring_parameters(TAGS)
+    @docstring_parameters(TARGETS)
     def getTargets(self):
         """
         getTargets(self)
