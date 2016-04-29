@@ -11,6 +11,7 @@ from moira.api.resources.subscription import Subscriptions
 from moira.api.resources.tags import Tags
 from moira.api.resources.trigger import Triggers
 from moira.api.resources.user import Login
+from moira.api.resources.targets import Targets
 
 
 class MoiraRequest(server.Request):
@@ -48,6 +49,7 @@ class Site(server.Site):
         prefix.putChild("subscription", Subscriptions(db))
         prefix.putChild("user", Login(db))
         prefix.putChild("notification", Notifications(db))
+        prefix.putChild("targets", Targets(db))
         server.Site.__init__(self, root)
 
     def _escape(self, s):

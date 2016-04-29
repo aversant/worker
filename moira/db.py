@@ -70,6 +70,7 @@ TRIGGER_NEXT_PREFIX = "moira-notifier-next:{0}"
 NOTIFIER_NOTIFICATIONS = "moira-notifier-notifications"
 TAG_PREFIX = "moira-tag:{0}"
 TRIGGER_CHECK_LOCK_PREFIX = "moira-metric-check-lock:{0}"
+TARGETS = "moira-all-targets"
 
 TRIGGER_EVENTS_TTL = 3600 * 24 * 30
 
@@ -99,7 +100,8 @@ current_module.__doc__ = _doc_string.format(
     TRIGGER_EVENTS.format("<trigger_id>"),
     TRIGGER_THROTTLING_BEGINNING_PREFIX.format("<trigger_id>"),
     TAG_PREFIX.format("<tag>"),
-    TRIGGER_CHECK_LOCK_PREFIX.format("trigger_id")
+    TRIGGER_CHECK_LOCK_PREFIX.format("trigger_id"),
+    TARGETS
 )
 
 
@@ -1070,6 +1072,25 @@ class Db(service.Service):
         else:
             events = yield self.rc.zrange(TRIGGER_EVENTS.format(trigger_id), start=start, end=end)
         defer.returnValue([anyjson.deserialize(e) for e in events])
+
+    @defer.inlineCallbacks
+    @docstring_parameters(TAGS)
+    def getTargets(self):
+        """
+        getTargets(self)
+
+        Returns all targets from db (variant = False)
+        or returns list targets in set TARGETS
+
+        :rtype: list
+        """
+        variant = False
+        if variant:
+            targets = yield self.rc.hkeys(TARGETS)
+            defer.returnValue(targets)
+        else:
+            targets = yield self.rc.keys("moira-metric-data*")
+            defer.returnValue([target.split(":")[1] for target in targets])
 
     @defer.inlineCallbacks
     def flush(self):
