@@ -24,7 +24,7 @@ except ImportError:
 
 CONFIG_PATH = '/etc/moira/config.yml'
 # CONFIG_PATH = '..\\pkg\\worker.yml'
-REDIS_HOST = "10.160.62.26"
+REDIS_HOST = "localhost"
 REDIS_PORT = 6379
 LOG_DIRECTORY = "stdout"
 HTTP_PORT = 8081
