@@ -314,3 +314,13 @@ class ApiTests(WorkerTests):
     def testUserLogin(self):
         response, user = yield self.request('GET', 'user')
         self.assertEqual('tester', user["login"])
+
+    @inlineCallbacks
+    def testTargets(self):
+        metric = "devops.functest.m"
+        yield self.db.sendMetric(metric, metric, self.now, 1)
+        response, targets = yield self.request('GET', 'targets?name=devops')
+        self.assertTrue(metric in targets["list"])
+        response, targets = yield self.request('GET', 'targets?name=badtest')
+        self.assertEqual([], targets["list"])
+        response, body = yield self.request('GET', 'targets?name1=devops', state=http.BAD_REQUEST)
