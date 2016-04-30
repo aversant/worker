@@ -1084,12 +1084,11 @@ class Db(service.Service):
 
         :rtype: list
         """
-        variant = False
-        if variant:
+        if self.rc.exists(TARGETS):
             targets = yield self.rc.hkeys(TARGETS)
             defer.returnValue(targets)
         else:
-            targets = yield self.rc.keys("moira-metric-data*")
+            targets = yield self.rc.keys(METRIC_PREFIX.format("*"))
             defer.returnValue([target.split(":")[1] for target in targets])
 
     @defer.inlineCallbacks
